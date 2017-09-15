@@ -4,6 +4,7 @@ from collections import (
     Mapping,
     MutableMapping,
     OrderedDict,
+    Sequence,
 )
 
 from web3.utils.formatters import recursive_map
@@ -155,7 +156,10 @@ class NamedElementStack:
         del self._queue[old]
 
     def __iter__(self):
-        return iter(reversed(self._queue.values()))
+        elements = self._queue.values()
+        if not isinstance(elements, Sequence):
+            elements = list(elements)
+        return iter(reversed(elements))
 
     def __add__(self, other):
         if not isinstance(other, NamedElementStack):
